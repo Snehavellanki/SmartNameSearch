@@ -1,0 +1,103 @@
+@page
+@model NameSearchModel
+@{
+}
+<head>
+    <title>Index</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+
+
+<div class="bg-info text-white p-3 rounded">
+    <fieldset>
+        <legend>Search for Names in Peoples DB</legend>
+    </fieldset>
+    <form method="get">
+        <div class="row justify-content-lg-start px-3">
+            <div class="col-lg-9 col-md-11 col-sm-12 col-xs-12">
+                <span class="font-weight-bold">Select type of Search</span>
+                @foreach (var type in Model.typeofSearches)
+                {
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" asp-for="typeofSearch" type="radio" value="@type" />
+                        <label class="form-check-label" for="@type">@type</label>
+                    </div>
+                }
+
+            </div>
+
+
+        </div>
+
+        <div class="row justify-content-center px-3">
+            <div class="input-group">
+                <input class="form-control" asp-for="SearchWords.GlobalSearch" placeholder="Enter a keyword to search in Names" />
+                <span class="text-danger" asp-validation-for="SearchWords.GlobalSearch" ></span>
+            </div>
+            <div class="input-group px-3">
+                <div class="col-lg-9 col-md-11 col-sm-12 col-xs-12">
+                    <span>OR use below search filters if want to use the combination of firstname, middlename and lastname </span>
+                </div>
+            </div>
+        </div>
+        <div class="pb-2">
+            <div class="row justify-content-md-center">
+                <div class="input-group col-lg-4 col-xs-12 pb-2">
+                    <input class="form-control" asp-for="SearchWords.SearchFirstName" placeholder="Search in FirstNames" />
+                    <span class="text-danger   d-block" asp-validation-for="SearchWords.SearchFirstName"></span>
+                </div>
+                <div class="input-group col-lg-4 col-xs-12 pb-2">
+                    <input class="form-control" asp-for="SearchWords.SearchMiddleName" placeholder="Search in MiddleNames and/or FirstName  " />
+                    <span class="text-danger   d-block" asp-validation-for="SearchWords.SearchMiddleName"></span>
+                </div>
+                <div class="input-group col-lg-4 col-xs-12 pb-2">
+                    <input class="form-control" asp-for="SearchWords.SearchLastName" placeholder="Search in LastNames and/or Middlename and/or FirstName" />
+                    <span class="text-danger  d-block" asp-validation-for="SearchWords.SearchLastName"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+</div>
+
+<div class="table-responsive table-striped table-bordered table-hover customTableCss">
+    <table class="table">
+        <thead class="thead-light fixed-top position-sticky">
+            <tr>
+                <th scope="col">FirstName</th>
+                <th scope="col">MiddleName</th>
+                <th scope="col">LastName</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Peoples.Any())
+            {
+                @foreach (var name in Model.Peoples)
+                {
+                    <tr>
+                        <td>@name.FirstName</td>
+                        <td>@name.MiddleName</td>
+                        <td>@name.LastName</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" class="text-center bg-warning">Zero records</td>
+                    
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+</div>
+
+@section scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
